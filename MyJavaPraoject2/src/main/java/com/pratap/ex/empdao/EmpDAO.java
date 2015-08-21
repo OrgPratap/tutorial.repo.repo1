@@ -6,32 +6,35 @@ import java.sql.SQLException;
 
 import com.pratap.ex.emp.Emp;
 
-public class EmpDAO 
-{
+public class EmpDAO {
 	private Connection connection;
 
-	public EmpDAO() 
-	{
+	public EmpDAO() {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			System.out.println("++++++++++DRIVER LOADED SUCCESSFULLY++++++++++++");
-			connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "system", "root");
+			connection = DriverManager.getConnection(
+				"jdbc:oracle:thin:@localhost:1521:XE", "system", "root");
 			System.out.println("++++++++++CONNECTED TO THE DATABSE{XE}");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public boolean addEmp(Emp emp){
-		
-		String sql="inser into ";
-		
-		
-		return false;
+
+	public boolean addEmp(Emp emp) {
+
+		boolean queryExecutedProperly = false;
+		String sql = "insert into emp values('" + emp.getEmpId() + "','" + emp.getEmpName() + "'," + emp.getEmpAge() + "," + emp.getEmpSalary() + ")";
+		try {
+			int result = -1;
+			result = connection.createStatement().executeUpdate(sql);
+			if(result != -1)
+				queryExecutedProperly = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return queryExecutedProperly;
 	}
-	
 }
